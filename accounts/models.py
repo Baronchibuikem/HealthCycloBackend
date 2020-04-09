@@ -25,7 +25,7 @@ class CustomUser(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['fullname', 'username',
-                       'organization', 'designation', 'purpose_of_data', ]
+                       'organization', 'designation', 'purpose_of_data',]
 
     def save(self, *args, **kwargs):
         self.password = make_password(self.password)
