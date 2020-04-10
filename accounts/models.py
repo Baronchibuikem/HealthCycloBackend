@@ -28,7 +28,12 @@ class CustomUser(AbstractUser):
                        'organization', 'designation', 'purpose_of_data',]
 
     def save(self, *args, **kwargs):
-        self.password = make_password(self.password)
+        if not self.username:
+            self.username = self.fullname[:3] + str(len(self.fullname))
+        if self.is_staff:
+            self.password = self.password
+        elif not self.is_staff:
+            self.password = make_password(self.password)
         super().save(*args, **kwargs)
 
     def __str__(self):

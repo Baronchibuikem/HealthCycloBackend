@@ -1,5 +1,6 @@
 # Default Django/Django_Rest Imports
-from rest_framework import generics, permissions
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, AllowAny
 from rest_framework.response import Response
 from accounts.models import CustomUser
 from rest_framework import status, viewsets
@@ -54,9 +55,18 @@ class LoginAPIViewset(generics.GenericAPIView):
 #         return CustomUser.objects.all()
 
 
-class UserAPIViewset(viewsets.ModelViewSet):
-    """
-    A viewset that provides the standard actions
-    """
-    queryset = CustomUser.objects.all()
+# class UserAPIViewset(viewsets.ModelViewSet):
+#     """
+#     A viewset that provides the standard actions
+#     """
+#     queryset = CustomUser.objects.all()
+#     serializer_class = GetUserSerializer
+#     # permission_classes = [IsAuthenticated, IsAdminUser]
+
+
+class UserAPI(generics.RetrieveAPIView):
     serializer_class = GetUserSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self):
+        return self.request.user
